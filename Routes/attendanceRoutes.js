@@ -133,7 +133,7 @@ router.post('/mark', jwtAuthMiddleware, async (req, res) => {
 
         // 60 Seconds Timer
         const timeDifference = Date.now() - session.createdAt;
-        if (timeDifference > 60000) { 
+        if (timeDifference > 300000) { 
             return res.status(400).json({ message: 'Session Expired (Time limit exceeded)' });
         }
 
