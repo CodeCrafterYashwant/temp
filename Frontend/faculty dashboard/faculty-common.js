@@ -20,7 +20,7 @@ function checkAuth() {
     
     // Redirect to login if no token is found
     if (!token) {
-        window.location.href = "../login page/login.html";
+        window.location.href = "../index.html";
         return;
     }
 }
@@ -77,7 +77,7 @@ function setupLogout() {
 
                 // 2. Redirect to Login Page
                 // Using "../" to navigate out of faculty folder to login page folder
-                window.location.href = "../login page/login.html";
+                window.location.href = "../index.html";
             }
         });
     }

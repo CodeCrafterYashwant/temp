@@ -27,7 +27,7 @@ async function loadAttendancePageHistory() {
     const token = localStorage.getItem("token");
     if (!token) {
         // Redirect if no token is found initially
-        window.location.href = "../login page/login.html";
+        window.location.href = "../index.html";
         return;
     }
 
@@ -42,7 +42,7 @@ async function loadAttendancePageHistory() {
         if (response.status === 401) {
             alert("Session Expired. Please login again.");
             localStorage.removeItem("token");
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
             return;
         }
 
@@ -154,7 +154,7 @@ if(form) {
         if (!userLocation) return alert("Please verify location first.");
         if (!token) {
             alert("Session expired.");
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
             return;
         }
 
@@ -181,7 +181,7 @@ if(form) {
             if (response.status === 401) {
                 alert("Session Expired. Please login again.");
                 localStorage.removeItem("token");
-                window.location.href = "../login page/login.html";
+                window.location.href = "../index.html";
                 return;
             }
 

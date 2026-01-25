@@ -15,7 +15,7 @@ form.addEventListener("submit", async (e) => {
 
     if (!token) {
         alert("Session expired. Please login again.");
-        window.location.href = "../login page/login.html";
+        window.location.href = "../index.html";
         return;
     }
 
@@ -41,7 +41,7 @@ form.addEventListener("submit", async (e) => {
             localStorage.clear();
             
             // Redirect to login page using the correct relative path
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
         } else {
             statusMessage.innerText = data.message || "Failed to update password.";
             statusMessage.style.color = "#dc2626";

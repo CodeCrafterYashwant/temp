@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadAnalytics() {
     const token = localStorage.getItem("token");
     if (!token) {
-        window.location.href = "../login page/login.html";
+        window.location.href = "../index.html";
         return;
     }
 
@@ -31,7 +31,7 @@ async function loadAnalytics() {
         if (response.status === 401) {
             alert("Session Expired. Please login again.");
             localStorage.removeItem("token");
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
             return;
         }
 

@@ -48,7 +48,7 @@ if (shareWhatsappBtn) {
 async function loadHistory() {
     const token = localStorage.getItem("token");
     if (!token) {
-        window.location.href = "../login page/login.html";
+        window.location.href = "../index.html";
         return;
     }
 
@@ -61,7 +61,7 @@ async function loadHistory() {
         if (response.status === 401) {
             alert("Session Expired. Please login again.");
             localStorage.removeItem("token");
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
             return;
         }
 
@@ -187,7 +187,7 @@ startBtn.addEventListener("click", async () => {
             if (response.status === 401) {
                 alert("Session Expired. Please login again.");
                 localStorage.removeItem("token");
-                window.location.href = "../login page/login.html";
+                window.location.href = "../index.html";
                 return;
             }
 

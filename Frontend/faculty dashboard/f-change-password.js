@@ -18,7 +18,7 @@ form.addEventListener("submit", async (e) => {
     // 1. Authorization Check
     if (!token) {
         alert("Session expired. Please login again.");
-        window.location.href = "../login page/login.html";
+        window.location.href = "../index.html";
         return;
     }
 
@@ -48,7 +48,7 @@ form.addEventListener("submit", async (e) => {
             localStorage.clear();
             
             // Redirect to login page
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
         } else {
             // Show server-side error (e.g., incorrect current password)
             statusMessage.innerText = data.message || "Failed to update password.";

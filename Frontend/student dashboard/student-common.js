@@ -18,7 +18,7 @@ function checkAuth() {
     const token = localStorage.getItem("token");
     if (!token) {
         // 👇 THIS LINE MUST HAVE THE "../"
-        window.location.href = "../login page/login.html"; 
+        window.location.href = "../index.html"; 
     }
 }
 
@@ -62,7 +62,7 @@ function setupLogout() {
                 localStorage.removeItem("user");
                 
                 // 🔴 FIX: Correct path here too
-                window.location.href = "../login page/login.html";
+                window.location.href = "../index.html";
             }
         });
     }

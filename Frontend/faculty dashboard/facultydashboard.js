@@ -38,7 +38,7 @@ async function loadDashboardSessions() {
 
     // 1. Check if token exists locally
     if (!token) {
-        window.location.href = "../login page/login.html"; // Redirect if missing
+        window.location.href = "../index.html"; // Redirect if missing
         return;
     }
 
@@ -52,7 +52,7 @@ async function loadDashboardSessions() {
         if (response.status === 401) {
             alert("Session Expired. Please login again.");
             localStorage.removeItem("token");
-            window.location.href = "../login page/login.html";
+            window.location.href = "../index.html";
             return;
         }
 
