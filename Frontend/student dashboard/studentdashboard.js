@@ -8,11 +8,91 @@ const historyContainer = document.getElementById("recentAttendanceList");
 // INITIALIZATION
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. Load History
     loadStudentDashboardHistory();
+    
+    // 2. Initialize Calendar (Fixes Arrows)
+    initCalendar(); 
 });
 
 // ==========================================
-// MAIN FUNCTION: LOAD HISTORY
+// PART 1: CALENDAR LOGIC (The Fix)
+// ==========================================
+let currentDate = new Date();
+
+function initCalendar() {
+    const prevMonthBtn = document.getElementById("prevMonth");
+    const nextMonthBtn = document.getElementById("nextMonth");
+
+    // Render immediately so the calendar appears on load
+    renderCalendar();
+
+    // Attach Event Listeners safely
+    if (prevMonthBtn) {
+        prevMonthBtn.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+    } else {
+        console.warn("Previous Month button not found in HTML");
+    }
+
+    if (nextMonthBtn) {
+        nextMonthBtn.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+    } else {
+        console.warn("Next Month button not found in HTML");
+    }
+}
+
+function renderCalendar() {
+    const monthYearText = document.getElementById("currentMonthYear");
+    const calendarGrid = document.getElementById("calendarGrid");
+
+    if (!calendarGrid) return;
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    // Update Header Text (e.g., "January 2026")
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (monthYearText) monthYearText.innerText = `${monthNames[month]} ${year}`;
+
+    // Calculate Date Offsets
+    const firstDay = new Date(year, month, 1).getDay(); // Day of week (0-6)
+    const lastDate = new Date(year, month + 1, 0).getDate(); // Days in current month
+    const lastDatePrevMonth = new Date(year, month, 0).getDate(); // Days in prev month
+
+    // Clear previous grid
+    calendarGrid.innerHTML = "";
+
+    // Render Previous Month Padding (Inactive Days)
+    for (let i = firstDay; i > 0; i--) {
+        const div = document.createElement("div");
+        div.className = "calendar-date inactive";
+        div.innerText = lastDatePrevMonth - i + 1;
+        calendarGrid.appendChild(div);
+    }
+
+    // Render Current Month Days
+    const today = new Date();
+    for (let i = 1; i <= lastDate; i++) {
+        const div = document.createElement("div");
+        div.className = "calendar-date";
+        div.innerText = i;
+
+        // Highlight Today
+        if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            div.classList.add("today");
+        }
+        calendarGrid.appendChild(div);
+    }
+}
+
+// ==========================================
+// PART 2: HISTORY LOGIC (Your Existing Code)
 // ==========================================
 async function loadStudentDashboardHistory() {
     const token = localStorage.getItem("token");
@@ -40,16 +120,15 @@ async function loadStudentDashboardHistory() {
         const data = await response.json();
 
         // Clear "Loading..." text
-        historyContainer.innerHTML = "";
+        if (historyContainer) historyContainer.innerHTML = "";
 
         // 4. Handle Empty Data
         if (!data || data.length === 0) {
-            historyContainer.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">No attendance marked yet.</p>`;
+            if (historyContainer) historyContainer.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">No attendance marked yet.</p>`;
             return;
         }
 
         // 5. Sort & Slice (Latest 5 records)
-        // Note: If your API returns oldest first, use reverse(). If newest first, remove reverse().
         const recentRecords = data.reverse().slice(0, 5);
 
         // 6. Generate Rows
@@ -76,7 +155,7 @@ async function loadStudentDashboardHistory() {
             const row = document.createElement("div");
             row.className = "history-row";
             
-            // Apply Grid Styles (matches HTML header: Subject | Date | Time | Status)
+            // Apply Grid Styles
             row.style.display = "grid";
             row.style.gridTemplateColumns = "1.5fr 1fr 1fr 1fr";
             row.style.padding = "12px 15px";
@@ -95,14 +174,11 @@ async function loadStudentDashboardHistory() {
                 </span>
             `;
 
-            historyContainer.appendChild(row);
+            if (historyContainer) historyContainer.appendChild(row);
         });
 
     } catch (error) {
         console.error("Dashboard Error:", error);
-        historyContainer.innerHTML = `<p style="text-align:center; color:red; padding:20px;">Failed to load history.</p>`;
+        if (historyContainer) historyContainer.innerHTML = `<p style="text-align:center; color:red; padding:20px;">Failed to load history.</p>`;
     }
 }
-// ==========================================
-// END
-// ==========================================
