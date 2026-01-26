@@ -7,21 +7,22 @@ const API_HISTORY_URL = "https://temp-zw0w.onrender.com/attendance/history";
 // 2. INITIALIZATION (Runs when page loads)
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Dashboard Loaded. Initializing...");
+    console.log("Dashboard Loaded...");
     
-    // Initialize Calendar Logic
+    // UI FIRST: Initialize Calendar (This makes arrows work immediately)
     initCalendar();
     
-    // Initialize History Logic
+    // DATA SECOND: Load Attendance History
     loadStudentDashboardHistory();
 });
 
 // ==========================================
-// 3. CALENDAR LOGIC (Arrows Fix)
+// 3. CALENDAR LOGIC
 // ==========================================
 let currentDate = new Date();
 
 function initCalendar() {
+    // Select elements INSIDE the function to ensure they exist
     const prevBtn = document.getElementById("prevMonth");
     const nextBtn = document.getElementById("nextMonth");
 
@@ -35,7 +36,7 @@ function initCalendar() {
             renderCalendar();
         });
     } else {
-        console.error("Error: 'prevMonth' arrow button not found in HTML.");
+        console.error("Error: 'prevMonth' arrow button not found.");
     }
 
     if (nextBtn) {
@@ -44,7 +45,7 @@ function initCalendar() {
             renderCalendar();
         });
     } else {
-        console.error("Error: 'nextMonth' arrow button not found in HTML.");
+        console.error("Error: 'nextMonth' arrow button not found.");
     }
 }
 
@@ -93,15 +94,19 @@ function renderCalendar() {
 }
 
 // ==========================================
-// 4. HISTORY LOGIC (Loading Fix)
+// 4. HISTORY LOGIC
 // ==========================================
 async function loadStudentDashboardHistory() {
-    // Get container INSIDE function to ensure it exists
     const historyContainer = document.getElementById("recentAttendanceList");
     const token = localStorage.getItem("token");
 
+    // If container is missing, stop (prevents crash)
+    if (!historyContainer) return;
+
     if (!token) {
-        window.location.href = "../login page/login.html"; 
+        historyContainer.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">Please login to view history.</p>`;
+        // Optional: Redirect
+        // window.location.href = "../login page/login.html"; 
         return;
     }
 
@@ -112,6 +117,7 @@ async function loadStudentDashboardHistory() {
 
         // Check for Session Expiry
         if (response.status === 401) {
+            historyContainer.innerHTML = `<p style="text-align:center; padding:20px; color:red;">Session expired.</p>`;
             alert("Session Expired. Please login again.");
             localStorage.removeItem("token");
             window.location.href = "../login page/login.html";
@@ -120,68 +126,65 @@ async function loadStudentDashboardHistory() {
 
         const data = await response.json();
 
-        if (historyContainer) {
-            historyContainer.innerHTML = ""; // Clear "Loading..."
+        historyContainer.innerHTML = ""; // Clear "Loading..."
 
-            // Check if data exists
-            if (!data || data.length === 0) {
-                historyContainer.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">No attendance marked yet.</p>`;
-                return;
+        // Check if data exists
+        if (!data || data.length === 0) {
+            historyContainer.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">No attendance marked yet.</p>`;
+            return;
+        }
+
+        // Reverse to show newest first, then take top 5
+        // Note: Check if data is array. If backend returns {message: ...}, this might fail.
+        const recentRecords = Array.isArray(data) ? data.reverse().slice(0, 5) : [];
+
+        recentRecords.forEach(record => {
+            const session = record.session_id || {};
+            
+            // Safe Data Handling
+            const subject = session.class_name || session.className || "Unknown Class";
+            
+            // Date Formatting
+            const rawDate = record.createdAt || record.timestamp || session.createdAt;
+            let dateStr = "N/A";
+            let timeStr = "--:--";
+
+            if (rawDate) {
+                const dateObj = new Date(rawDate);
+                if (!isNaN(dateObj.getTime())) {
+                    dateStr = dateObj.toLocaleDateString();
+                    timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                }
             }
 
-            // Reverse to show newest first, then take top 5
-            const recentRecords = data.reverse().slice(0, 5);
+            // Create Row
+            const row = document.createElement("div");
+            row.className = "history-row";
+            
+            // INLINE STYLES to ensure grid works even if CSS fails
+            row.style.display = "grid";
+            row.style.gridTemplateColumns = "1.5fr 1fr 1fr 1fr"; 
+            row.style.padding = "15px";
+            row.style.borderBottom = "1px solid #eee";
+            row.style.alignItems = "center";
+            row.style.fontSize = "0.9rem";
 
-            recentRecords.forEach(record => {
-                const session = record.session_id || {};
-                const subject = session.class_name || session.className || "Unknown Class";
-                
-                // Date Formatting
-                const rawDate = record.createdAt || record.timestamp || session.createdAt;
-                let dateStr = "N/A";
-                let timeStr = "--:--";
-
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    if (!isNaN(dateObj.getTime())) {
-                        dateStr = dateObj.toLocaleDateString();
-                        timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    }
-                }
-
-                // Create Row
-                const row = document.createElement("div");
-                row.className = "history-row";
-                
-                // INLINE STYLES to ensure grid works even if CSS fails
-                row.style.display = "grid";
-                row.style.gridTemplateColumns = "1.5fr 1fr 1fr 1fr"; 
-                row.style.padding = "15px";
-                row.style.borderBottom = "1px solid #eee";
-                row.style.alignItems = "center";
-                row.style.fontSize = "0.9rem";
-
-                row.innerHTML = `
-                    <span style="font-weight:600; color:#1f3c88;">${subject}</span>
-                    <span style="color:#555;">${dateStr}</span>
-                    <span style="color:#555;">${timeStr}</span>
-                    <span>
-                        <span style="background:#dcfce7; color:#166534; padding:4px 10px; border-radius:12px; font-size:0.8rem; font-weight:600;">
-                            Present
-                        </span>
+            row.innerHTML = `
+                <span style="font-weight:600; color:#1f3c88;">${subject}</span>
+                <span style="color:#555;">${dateStr}</span>
+                <span style="color:#555;">${timeStr}</span>
+                <span>
+                    <span style="background:#dcfce7; color:#166534; padding:4px 10px; border-radius:12px; font-size:0.8rem; font-weight:600;">
+                        Present
                     </span>
-                `;
+                </span>
+            `;
 
-                historyContainer.appendChild(row);
-            });
-        } else {
-            console.error("Error: 'recentAttendanceList' container not found in HTML.");
-        }
+            historyContainer.appendChild(row);
+        });
 
     } catch (error) {
         console.error("Dashboard Error:", error);
-        if(historyContainer) {
-            historyContainer.innerHTML = `<p style="text-align:center; color:red; padding:20px;">Failed to load history.</p>`;
-        }
+        historyContainer.innerHTML = `<p style="text-align:center; color:red; padding:20px;">Failed to load history.</p>`;
     }
 }
