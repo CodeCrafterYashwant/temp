@@ -16,15 +16,15 @@
     
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive Grid */
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       margin-top: 15px;
     }
 
     .gallery-img {
       width: 100%;
-      height: 180px; /* Fixed height for uniformity */
-      object-fit: cover; /* Crops image nicely */
+      height: 180px; 
+      object-fit: cover;
       border-radius: 12px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
@@ -48,24 +48,85 @@
     .notice-title { font-weight: 600; font-size: 0.9rem; color: #333; margin: 0; }
     .notice-date { font-size: 0.75rem; color: #94a3b8; }
 
-    /* Calendar Nav Styles (Inline to ensure visibility) */
+    /* --- CALENDAR FIXES (FOR BLUE BACKGROUND) --- */
+    .calendar-card {
+      /* Assuming you have a blue background class here, or we enforce it */
+      background: #5b6cff; 
+      color: white;
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
     .calendar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
-    
+
+    #currentMonthYear {
+      color: white !important; /* Force Title White */
+      margin: 0;
+    }
+
     .calendar-nav i {
       cursor: pointer;
-      font-size: 1.5rem; /* Made arrows larger */
-      color: #5b6cff;
+      font-size: 1.5rem;
+      color: white !important; /* FORCE ARROWS WHITE */
       padding: 5px;
-      margin-left: 5px;
-    }
-    .calendar-nav i:hover {
-      background-color: #f0f4ff;
       border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    .calendar-nav i:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Days of week header (S M T W...) */
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8); /* Slight transparent white */
+      margin-bottom: 10px;
+    }
+
+    /* Grid Numbers */
+    .calendar-grid {
+      display: grid; 
+      grid-template-columns: repeat(7, 1fr); 
+      gap: 5px; 
+      text-align: center;
+    }
+    
+    .calendar-date {
+      color: white;
+      height: 30px;
+      width: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .calendar-date:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .calendar-date.today {
+        background: white;
+        color: #5b6cff; /* Blue text on white circle */
+        font-weight: bold;
+    }
+    
+    .calendar-date.inactive {
+        color: rgba(255,255,255,0.3);
     }
   </style>
 </head>
@@ -140,11 +201,11 @@
               <i class="ri-arrow-right-s-line" id="nextMonth"></i>
             </div>
             </div>
-
-          <div class="calendar-days" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 600; font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">
+          
+          <div class="calendar-days">
             <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
           </div>
-          
+
           <div class="calendar-grid" id="calendarGrid">
             </div>
         </div>
