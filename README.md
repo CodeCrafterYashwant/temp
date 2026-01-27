@@ -107,24 +107,24 @@ Follow these instructions to get a copy of the project up and running on your lo
 │   └── middleware/     # JWT Auth & Security
 └── README.md
 ```
-###Contributing
-Contributions make the open-source community an amazing place to learn and create.
+##Contributing
+```Contributions make the open-source community an amazing place to learn and create.```
 
-###Fork the Project.
-
+##Fork the Project.
+```
 Create your Feature Branch (git checkout -b feature/AmazingFeature).
 
 Commit your Changes (git commit -m 'Add some AmazingFeature').
 
 Push to the Branch (git push origin feature/AmazingFeature).
 
-Open a Pull Request.
-
+Open a Pull Request
+```
 ## 👤 Author
 
 **Yashwant**
 * **GitHub:** [@CodeCrafterYashwant](https://github.com/CodeCrafterYashwant)
-* **LinkedIn:** [yashwantnamdev](https://www.linkedin.com/yashwantnamdev)
+* **LinkedIn:** [yashwantnamdev](https://www.linkedin.com/yashwantnamdev/)
 
 📄 License
 Distributed under the MIT License. See LICENSE for more information.
