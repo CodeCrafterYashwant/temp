@@ -124,7 +124,7 @@ Open a Pull Request
 
 **Yashwant**
 * **GitHub:** [@CodeCrafterYashwant](https://github.com/CodeCrafterYashwant)
-* **LinkedIn:** [yashwantnamdev](https://www.linkedin.com/yashwantnamdev/)
+* **LinkedIn:** [yashwantnamdev](https://www.linkedin.com/in/yashwantnamdev/)
 
 📄 License
 Distributed under the MIT License. See LICENSE for more information.
