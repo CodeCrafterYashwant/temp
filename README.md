@@ -22,7 +22,7 @@ The application is fully deployed and operational:
 * **Secure Authentication:** Role-based access control for Administrators, Teachers, and Students.
 * **Real-time Tracking:** Instant database synchronization when attendance is marked.
 * **Proxy Prevention:** Verification logic to ensure the integrity of every entry.
-* **Automated Analytics:** Visualizes attendance trends with weekly and monthly percentage reports.
+* **Automated Analytics:** Visualizes attendance trends with weekly and monthly percentage reports.  
 * **User-Friendly Dashboard:** A clean, responsive interface for managing records on any device.
 
 ---
